@@ -1,0 +1,40 @@
+name: Coverage Report
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install coverage tools
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      - name: Configure CMake with coverage
+        run: cmake -S . -B build -DENABLE_COVERAGE=ON
+
+      - name: Build
+        run: cmake --build build --config Debug -- -j
+
+      - name: Run tests
+        run: ctest --output-on-failure --test-dir build
+
+      - name: Collect coverage
+        run: |
+          lcov --capture --directory build --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' --output-file coverage.info
+          lcov --list coverage.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.info
+          fail_ci_if_error: true
+          verbose: true
