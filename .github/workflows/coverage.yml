@@ -29,7 +29,7 @@ jobs:
       - name: Collect coverage
         run: |
           lcov --capture --directory build --output-file coverage.info --ignore-errors mismatch
-          lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' --output-file coverage.info --ignore-errors unused
+          lcov --remove coverage.info '/usr/*' '*/test/*' '*/tests/*' '*/examples/*' --output-file coverage.info --ignore-errors unused
           lcov --list coverage.info
 
       - name: Upload to Codecov
