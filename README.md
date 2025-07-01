@@ -66,7 +66,7 @@ cd build && ctest
 
 ## 📈 Code Coverage
 
-[![codecov](https://codecov.io/gh/your-org/your-repo/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/your-repo)
+[![codecov](https://codecov.io/gh/ZigRazor/CXXStateTree/graph/badge.svg?token=A1RP2ZDGI6)](https://codecov.io/gh/ZigRazor/CXXStateTree)
 
 ---
 
