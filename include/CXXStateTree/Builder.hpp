@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include "StateTree.hpp"
 
 namespace CXXStateTree
@@ -16,23 +17,25 @@ namespace CXXStateTree
 
         Builder &state(const std::string &name, std::function<void(State &)> config)
         {
-            State s(name);
-            config(s);
-            states_.insert({name, std::move(s)});
+            states_.emplace_back(name);
+            config(states_.back());
             return *this;
         }
 
         StateTree build()
         {
-            if (initial_state_.empty())
+            StateTree tree;
+            tree.states_ = std::move(states_);
+            tree.current_ = tree.find_state(initial_state_);
+            if (tree.current_ && tree.current_->initial_substate())
             {
-                throw std::runtime_error("Initial state not set");
+                tree.current_ = tree.current_->find_substate(*tree.current_->initial_substate());
             }
-            return StateTree(states_, initial_state_);
+            return tree;
         }
 
     private:
-        std::unordered_map<std::string, State> states_;
+        std::list<State> states_;
         std::string initial_state_;
     };
 } // namespace CXXStateTree

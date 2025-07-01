@@ -10,6 +10,10 @@ target_include_directories(CXXStateTree INTERFACE include)
 add_executable(basic examples/basic.cpp)
 target_link_libraries(basic PRIVATE CXXStateTree)
 
+
+add_executable(nested examples/nested.cpp)
+target_link_libraries(nested PRIVATE CXXStateTree)
+
 # GoogleTest setup
 include(FetchContent)
 FetchContent_Declare(

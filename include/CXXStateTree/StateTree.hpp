@@ -24,29 +24,102 @@ namespace CXXStateTree
 
         void send(const std::string &event)
         {
-            const auto &current = states_.at(current_state_);
-            auto trans = current.get_transition(event);
-            if (trans && (!trans->guard.has_value() || (trans->guard.has_value() && !trans->guard.value()) || (*trans->guard)()))
+            if (!current_)
+                return;
+            const auto &transitions = current_->transitions();
+            auto it = transitions.find(event);
+            if (it != transitions.end())
             {
-                if (trans->action.has_value() && trans->action.value() != nullptr)
+                const auto &trans = it->second;
+                if (trans.guard && !trans.guard())
+                    return;
+                if (trans.action)
+                    trans.action();
+                current_ = find_state(trans.target);
+                if (current_ && current_->initial_substate())
                 {
-                    (*trans->action)();
+                    current_ = current_->find_substate(*current_->initial_substate());
                 }
-                current_state_ = trans->target;
+            }
+            // try to send the event to parent states
+            else if (current_->parent())
+            {
+                sendToParent(event, current_->parent());
+            }
+            else
+            {
+                throw std::runtime_error("Event '" + event + "' not handled in state '" + current_->name() + "'");
             }
         }
 
-        const std::string &current_state() const
+        void sendToParent(const std::string &event, const State *parent)
         {
-            return current_state_;
+            if (!parent)
+                return;
+            const auto &transitions = parent->transitions();
+            auto it = transitions.find(event);
+            if (it != transitions.end())
+            {
+                const auto &trans = it->second;
+                if (trans.guard && !trans.guard())
+                    return;
+                if (trans.action)
+                    trans.action();
+                current_ = find_state(trans.target);
+                if (current_ && current_->initial_substate())
+                {
+                    current_ = current_->find_substate(*current_->initial_substate());
+                }
+            }
+            else if (parent->parent())
+            {
+                sendToParent(event, parent->parent());
+            }
+            else
+            {
+                throw std::runtime_error("Event '" + event + "' not handled in parent state '" + parent->name() + "'");
+            }
+        }
+
+        const State &current_state() const
+        {
+            return *current_;
         }
 
     private:
-        StateTree(std::unordered_map<std::string, State> states, std::string initial)
-            : states_(std::move(states)), current_state_(std::move(initial)) {}
+        std::list<State> states_;
+        const State *current_ = nullptr;
 
-        std::unordered_map<std::string, State> states_;
-        std::string current_state_;
+        const State *find_state(const std::string &name) const
+        {
+
+            if (!current_ || current_->parent() == nullptr)
+            {
+                for (const auto &s : states_)
+                {
+                    if (s.name() == name)
+                        return &s;
+                }
+                return nullptr;
+            }
+            else
+            {
+
+                auto foundState = current_->parent()->find_substate(name);
+                if (foundState)
+                {
+                    return foundState;
+                }
+
+                for (const auto &s : states_)
+                {
+                    if (s.name() == name)
+                        return &s;
+                }
+            }
+
+            return nullptr;
+        }
     };
 
 } // namespace CXXStateTree

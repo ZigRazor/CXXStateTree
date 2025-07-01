@@ -25,15 +25,15 @@ int main()
                                      { std::cout << "Transition: Paused -> Running" << std::endl; }); })
                        .build();
 
-    std::cout << "Initial state: " << machine.current_state() << std::endl;
+    std::cout << "Initial state: " << machine.current_state().name() << std::endl;
     machine.send("Start");
-    std::cout << "Current state: " << machine.current_state() << std::endl;
+    std::cout << "Current state: " << machine.current_state().name() << std::endl;
     machine.send("Pause");
-    std::cout << "Current state: " << machine.current_state() << std::endl;
+    std::cout << "Current state: " << machine.current_state().name() << std::endl;
     machine.send("Resume");
-    std::cout << "Current state: " << machine.current_state() << std::endl;
+    std::cout << "Current state: " << machine.current_state().name() << std::endl;
     machine.send("Stop");
-    std::cout << "Current state: " << machine.current_state() << std::endl;
+    std::cout << "Current state: " << machine.current_state().name() << std::endl;
 
     return 0;
 }

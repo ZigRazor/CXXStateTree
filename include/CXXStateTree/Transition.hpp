@@ -13,7 +13,7 @@ namespace CXXStateTree
     struct Transition
     {
         std::string target;
-        std::optional<Guard> guard;
-        std::optional<Action> action;
+        Guard guard = nullptr;
+        Action action = nullptr;
     };
 } // namespace CXXStateTree
