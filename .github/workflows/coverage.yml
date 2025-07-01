@@ -21,7 +21,7 @@ jobs:
         run: cmake -S . -B build -DENABLE_COVERAGE=ON
 
       - name: Build
-        run: cmake --build build --config Debug -- -j
+        run: cmake --build build --config Debug
 
       - name: Run tests
         run: ctest --output-on-failure --test-dir build
