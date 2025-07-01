@@ -1,5 +1,8 @@
 name: Coverage Report
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, master]
