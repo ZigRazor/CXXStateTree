@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(CXXStateTree VERSION 0.3.0 LANGUAGES CXX)
+project(CXXStateTree VERSION 0.4.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,6 +13,11 @@ target_link_libraries(basic PRIVATE CXXStateTree)
 
 add_executable(nested examples/nested.cpp)
 target_link_libraries(nested PRIVATE CXXStateTree)
+
+add_executable(export_dot_example examples/export_dot.cpp)
+target_include_directories(export_dot_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_executable(export_dot_nested_example examples/export_dot_nested.cpp)
+target_include_directories(export_dot_nested_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # GoogleTest setup
 include(FetchContent)

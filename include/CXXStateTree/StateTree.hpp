@@ -6,6 +6,8 @@
 #include <functional>
 #include <optional>
 #include <stdexcept>
+#include <sstream>
+#include <set>
 #include "State.hpp"
 
 namespace CXXStateTree
@@ -84,6 +86,66 @@ namespace CXXStateTree
         const State &current_state() const
         {
             return *current_;
+        }
+
+        std::string export_dot() const
+        {
+            std::ostringstream os;
+            os << "digraph StateTree {\n";
+            os << "\trankdir=LR;\n";
+            os << "\tnode [shape=box];\n";
+
+            // Collect cluster structure
+            for (const auto &s : states_)
+            {
+                s.collect_states(os);
+            }
+
+            std::vector<std::tuple<std::string, std::string, std::string>> transitions;
+            for (const auto &s : states_)
+            {
+                std::string name = s.name();
+                s.collect_transitions(transitions, name, s.baseName());
+            }
+
+            std::set<std::string> cluster_roots;
+            for (const auto &s : states_)
+            {
+                if (!s.substates().empty())
+                {
+                    cluster_roots.insert(s.name());
+                }
+            }
+
+            for (const auto &[from, to, event] : transitions)
+            {
+                bool from_is_cluster = cluster_roots.count(from);
+                bool to_is_cluster = cluster_roots.count(to);
+
+                std::string from_node = from_is_cluster ? from + "_exit" : "\"" + from + "\"";
+                std::string to_node = to_is_cluster ? to + "_entry" : "\"" + to + "\"";
+
+                os << "\t" << from_node << " -> " << to_node;
+
+                if (from_is_cluster || to_is_cluster)
+                {
+                    os << " [label=\"" << event << "\"";
+                    if (from_is_cluster)
+                        os << ", ltail=cluster_" << from;
+                    if (to_is_cluster)
+                        os << ", lhead=cluster_" << to;
+                    os << "]";
+                }
+                else
+                {
+                    os << " [label=\"" << event << "\"]";
+                }
+
+                os << ";\n";
+            }
+
+            os << "}\n";
+            return os.str();
         }
 
     private:
