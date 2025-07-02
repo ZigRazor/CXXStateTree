@@ -95,6 +95,15 @@ MPL2.0 License — see [LICENSE](LICENSE) for details.
 * DOT/Graphviz state diagram export
 * Transitions with context/parameters
 
+| Milestone   | Features                                                           |
+| ---------   | ------------------------------------------------------------------ |
+| v0.1.0      | Basic state machine with `send()`, transitions, and state tracking |
+| v0.2.0      | Guards and actions                                                 |
+| v0.3.0      | Nested (hierarchical) states                                       |
+| v0.4.0      | Graphviz export                                                    |
+| v0.5.0      | Coroutine/async support (optional)                                 |
+| v1.0.0      | Full unit test coverage, benchmarks, and docs                      |
+
 ---
 
 ## 👋 Contributions Welcome
