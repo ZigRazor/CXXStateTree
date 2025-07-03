@@ -37,11 +37,18 @@ TEST(StateTreeTest, TransitionChangesState)
 
 TEST(StateTreeTest, GuardPreventsTransition)
 {
+       class NotPassGuard : public IGuard
+       {
+       public:
+              bool evaluate(const std::any &context) const override
+              {
+                     return false;
+              }
+       };
        auto machine = Builder()
                           .initial("Idle")
                           .state("Idle", [](State &s)
-                                 { s.on("Start", "Running", nullptr, [](const std::any &)
-                                        { return false; }); })
+                                 { s.on("Start", "Running", new NotPassGuard()); })
                           .state("Running", [](State &s)
                                  { s.on("Stop", "Idle"); })
                           .build();
