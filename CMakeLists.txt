@@ -18,6 +18,11 @@ add_executable(export_dot_example examples/export_dot.cpp)
 target_include_directories(export_dot_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(export_dot_nested_example examples/export_dot_nested.cpp)
 target_include_directories(export_dot_nested_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_executable(export_dot_context_example examples/export_dot_context.cpp)
+target_include_directories(export_dot_context_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_executable(context_example examples/context_example.cpp)
+target_include_directories(context_example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # GoogleTest setup
 include(FetchContent)

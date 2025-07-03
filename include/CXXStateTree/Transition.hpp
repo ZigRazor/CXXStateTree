@@ -3,17 +3,17 @@
 #include <string>
 #include <optional>
 #include <functional>
+#include "IGuard.h"
 
 namespace CXXStateTree
 {
 
-    using Action = std::function<void()>;
-    using Guard = std::function<bool()>;
+    using Action = std::function<void(const std::any &)>;
 
     struct Transition
     {
         std::string target;
-        Guard guard = nullptr;
+        const IGuard *guard = nullptr;
         Action action = nullptr;
     };
 } // namespace CXXStateTree

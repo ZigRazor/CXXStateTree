@@ -24,7 +24,7 @@ namespace CXXStateTree
         // friend class declaration
         friend class Builder;
 
-        void send(const std::string &event)
+        void send(const std::string &event, const std::any &context = {})
         {
             if (!current_)
                 return;
@@ -33,10 +33,10 @@ namespace CXXStateTree
             if (it != transitions.end())
             {
                 const auto &trans = it->second;
-                if (trans.guard && !trans.guard())
+                if (trans.guard && !trans.guard->evaluate(context))
                     return;
                 if (trans.action)
-                    trans.action();
+                    trans.action(context);
                 current_ = find_state(trans.target);
                 if (current_ && current_->initial_substate())
                 {
@@ -46,40 +46,11 @@ namespace CXXStateTree
             // try to send the event to parent states
             else if (current_->parent())
             {
-                sendToParent(event, current_->parent());
+                sendToParent(event, context, current_->parent());
             }
             else
             {
                 throw std::runtime_error("Event '" + event + "' not handled in state '" + current_->name() + "'");
-            }
-        }
-
-        void sendToParent(const std::string &event, const State *parent)
-        {
-            if (!parent)
-                return;
-            const auto &transitions = parent->transitions();
-            auto it = transitions.find(event);
-            if (it != transitions.end())
-            {
-                const auto &trans = it->second;
-                if (trans.guard && !trans.guard())
-                    return;
-                if (trans.action)
-                    trans.action();
-                current_ = find_state(trans.target);
-                if (current_ && current_->initial_substate())
-                {
-                    current_ = current_->find_substate(*current_->initial_substate());
-                }
-            }
-            else if (parent->parent())
-            {
-                sendToParent(event, parent->parent());
-            }
-            else
-            {
-                throw std::runtime_error("Event '" + event + "' not handled in parent state '" + parent->name() + "'");
             }
         }
 
@@ -101,7 +72,7 @@ namespace CXXStateTree
                 s.collect_states(os);
             }
 
-            std::vector<std::tuple<std::string, std::string, std::string>> transitions;
+            std::vector<std::tuple<std::string, std::string, std::string, bool>> transitions;
             for (const auto &s : states_)
             {
                 std::string name = s.name();
@@ -117,8 +88,14 @@ namespace CXXStateTree
                 }
             }
 
-            for (const auto &[from, to, event] : transitions)
+            for (const auto &[from, to, event, has_guard] : transitions)
             {
+                std::string label = event;
+                if (has_guard)
+                {
+                    label += " [guard]";
+                }
+
                 bool from_is_cluster = cluster_roots.count(from);
                 bool to_is_cluster = cluster_roots.count(to);
 
@@ -129,7 +106,7 @@ namespace CXXStateTree
 
                 if (from_is_cluster || to_is_cluster)
                 {
-                    os << " [label=\"" << event << "\"";
+                    os << " [label=\"" << label << "\"";
                     if (from_is_cluster)
                         os << ", ltail=cluster_" << from;
                     if (to_is_cluster)
@@ -138,7 +115,7 @@ namespace CXXStateTree
                 }
                 else
                 {
-                    os << " [label=\"" << event << "\"]";
+                    os << " [label=\"" << label << "\"]";
                 }
 
                 os << ";\n";
@@ -181,6 +158,35 @@ namespace CXXStateTree
             }
 
             return nullptr;
+        }
+
+        void sendToParent(const std::string &event, const std::any &context, const State *parent)
+        {
+            if (!parent)
+                return;
+            const auto &transitions = parent->transitions();
+            auto it = transitions.find(event);
+            if (it != transitions.end())
+            {
+                const auto &trans = it->second;
+                if (trans.guard && !trans.guard->evaluate(context))
+                    return;
+                if (trans.action)
+                    trans.action(context);
+                current_ = find_state(trans.target);
+                if (current_ && current_->initial_substate())
+                {
+                    current_ = current_->find_substate(*current_->initial_substate());
+                }
+            }
+            else if (parent->parent())
+            {
+                sendToParent(event, context, parent->parent());
+            }
+            else
+            {
+                throw std::runtime_error("Event '" + event + "' not handled in parent state '" + parent->name() + "'");
+            }
         }
     };
 

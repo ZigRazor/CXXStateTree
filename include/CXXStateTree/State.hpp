@@ -12,7 +12,7 @@ namespace CXXStateTree
         explicit State(std::string name, State *parent = nullptr) : name_(std::move(name)), parent_(parent) {}
 
         State &on(const std::string &event, const std::string &target,
-                  Guard guard = nullptr, Action action = nullptr)
+                  IGuard *guard = nullptr, Action action = nullptr)
         {
             transitions_[event] = {std::move(target), guard, std::move(action)};
             return *this;
@@ -77,11 +77,12 @@ namespace CXXStateTree
             return nullptr;
         }
 
-        void collect_transitions(std::vector<std::tuple<std::string, std::string, std::string>> &all_transitions, const std::string &full_name, const std::string &base_name) const
+        void collect_transitions(std::vector<std::tuple<std::string, std::string, std::string, bool>> &all_transitions, const std::string &full_name, const std::string &base_name) const
         {
             for (const auto &[event, t] : transitions_)
             {
-                all_transitions.emplace_back(full_name, base_name != "" ? base_name + "." + t.target : t.target, event);
+                bool has_guard = t.guard != nullptr;
+                all_transitions.emplace_back(full_name, base_name != "" ? base_name + "." + t.target : t.target, event, has_guard);
             }
             for (const auto &sub : substates_)
             {

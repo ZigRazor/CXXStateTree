@@ -10,18 +10,18 @@ int main()
     auto machine = Builder()
                        .initial("Idle")
                        .state("Idle", [](State &s)
-                              { s.on("Start", "Running", nullptr, []()
+                              { s.on("Start", "Running", nullptr, [](const std::any &)
                                      { std::cout << "Transition: Idle -> Running" << std::endl; }); })
                        .state("Running", [](State &s)
                               {
-            s.on("Pause", "Paused", nullptr, []() {
+            s.on("Pause", "Paused", nullptr, [](const std::any &) {
                 std::cout << "Transition: Running -> Paused" << std::endl;
             });
-            s.on("Stop", "Idle", nullptr, []() {
+            s.on("Stop", "Idle", nullptr, [](const std::any &) {
                 std::cout << "Transition: Running -> Idle" << std::endl;
             }); })
                        .state("Paused", [](State &s)
-                              { s.on("Resume", "Running", nullptr, []()
+                              { s.on("Resume", "Running", nullptr, [](const std::any &)
                                      { std::cout << "Transition: Paused -> Running" << std::endl; }); })
                        .build();
 
