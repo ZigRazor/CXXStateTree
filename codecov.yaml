@@ -1,0 +1,15 @@
+ignore:
+  # This section specifies files and directories that Codecov should ignore
+  # when calculating code coverage. Ignoring non-production code (like tests
+  # or examples) ensures more accurate and relevant coverage metrics for
+  # your core application.
+
+  # Ignore all files and subdirectories within the 'examples' directory.
+  # This typically includes sample code or usage examples that aren't part
+  # of the main application's testable codebase.
+  - "examples/*"
+
+  # Ignore all files and subdirectories within the 'tests' directory.
+  # Test files themselves don't usually require coverage checks as they are
+  # responsible for testing other code, not being tested themselves.
+  - "tests/*"
