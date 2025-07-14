@@ -49,3 +49,6 @@ cmake_install.cmake
 Makefile
 build/
 
+# Single Include
+single_include/
+

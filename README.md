@@ -14,6 +14,7 @@
 * 🧪 Google Test integration
 * 📈 Code coverage with Codecov
 * 🌳 Designed for extensibility: nested states, DOT export coming soon
+* 🔧 Deployed as Shared Library and as Single Header-Only library
 
 ---
 
@@ -26,7 +27,7 @@
 using namespace CXXStateTree;
 
 int main() {
-    auto machine = Builder()
+    auto machine = StateTree::Builder()
         .initial("Idle")
         .state("Idle", [](State& s) {
             s.on("Start", "Running", nullptr, []() {
@@ -47,10 +48,36 @@ int main() {
 
 ---
 
+## 🛠️ Building Shared Library
+
+```bash
+cmake -S . -B build 
+cmake --build build
+```
+
+After these command the Shared Library can be found in `build` directory
+
+Please Note: in future release cmake will have the ability to install the library automatically, for now it is necessary to do it manually
+
+---
+
+## 🛠️ Building Single Header-Only Library
+
+```bash
+cmake -S . -B build -DENABLE_SINGLE_HEADER=ON
+cmake --build build
+```
+
+After these command the Single Header-Only Library can be found in `single_include` directory with the name CXXStateTree.hpp
+
+Please Note: in future release cmake will have the ability to install the library automatically, for now it is necessary to do it manually
+
+---
+
 ## 🧪 Running Tests
 
 ```bash
-cmake -S . -B build -DENABLE_COVERAGE=ON
+cmake -S . -B build -DENABLE_TEST=ON -DENABLE_COVERAGE=ON
 cmake --build build
 cd build && ctest
 ```

@@ -1,0 +1,11 @@
+{
+    "project": "CXXStateTree",
+    "target": "single_include/CXXStateTree.hpp",
+    "sources": [
+        "src/CXXStateTree/State.cpp",
+        "src/CXXStateTree/StateTree.cpp"
+    ],
+    "include_paths": [
+        "include"
+    ]
+}
