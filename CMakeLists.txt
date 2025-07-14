@@ -9,6 +9,12 @@ file (GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(CXXStateTree SHARED ${SRC_FILES})
 target_include_directories(CXXStateTree INTERFACE include ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
+set_target_properties(CXXStateTree PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release"
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release"
+    LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release"
+)
+
 option(ENABLE_TEST "Enable Test" OFF)
 
 if(ENABLE_TEST)
