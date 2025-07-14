@@ -91,7 +91,7 @@ if(ENABLE_SINGLE_HEADER)
   add_custom_command(
     OUTPUT  ${AMALGAMATE_OUT}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/single_include  # ensure /dist
-    COMMAND ${AMALGAMATE_PY} -c ${AMALGAMATE_CFG} -s ${CMAKE_CURRENT_SOURCE_DIR} -p ${AMALGAMATE_PRO} --verbose yes
+    COMMAND python3 ${AMALGAMATE_PY} -c ${AMALGAMATE_CFG} -s ${CMAKE_CURRENT_SOURCE_DIR} -p ${AMALGAMATE_PRO} --verbose yes
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${AMALGAMATE_PY} ${AMALGAMATE_CFG}
     COMMENT "Generating single‑header CXXStateTree.hpp with edlund/amalgamate"
