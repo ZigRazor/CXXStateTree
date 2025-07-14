@@ -6,8 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file (GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-add_library(CXXStateTree SHARED ${SRC_FILES})
-target_include_directories(CXXStateTree INTERFACE include ${CMAKE_CURRENT_SOURCE_DIR}/include )
+option(STATIC_LIB "Enable Static Library instead of Dynamic" OFF)
+
+if(STATIC_LIB)
+  add_library(CXXStateTree STATIC ${SRC_FILES})
+  target_include_directories(CXXStateTree INTERFACE include ${CMAKE_CURRENT_SOURCE_DIR}/include )
+else()
+  add_library(CXXStateTree SHARED ${SRC_FILES})
+  target_include_directories(CXXStateTree INTERFACE include ${CMAKE_CURRENT_SOURCE_DIR}/include )
+endif()
+
+
 
 set_target_properties(CXXStateTree PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release"
@@ -18,24 +27,24 @@ set_target_properties(CXXStateTree PROPERTIES
 option(ENABLE_TEST "Enable Test" OFF)
 
 if(ENABLE_TEST)
-# GoogleTest setup
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP true
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+  # GoogleTest setup
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/heads/main.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP true
+  )
+  # For Windows: Prevent overriding the parent project's compiler/linker settings
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(googletest)
 
 
-enable_testing()
-add_executable(state_tree_test tests/state_tree_test.cpp)
-target_link_libraries(state_tree_test PRIVATE CXXStateTree gtest_main)
+  enable_testing()
+  add_executable(state_tree_test tests/state_tree_test.cpp)
+  target_link_libraries(state_tree_test PRIVATE CXXStateTree gtest_main)
 
-include(GoogleTest)
-gtest_discover_tests(state_tree_test)
+  include(GoogleTest)
+  gtest_discover_tests(state_tree_test)
 
 endif()
 
@@ -43,27 +52,27 @@ endif()
 option(ENABLE_EXAMPLE "Enable Example" OFF)
 
 if(ENABLE_EXAMPLE)
-add_executable(basic examples/basic.cpp)
-target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(basic PRIVATE CXXStateTree)
+  add_executable(basic examples/basic.cpp)
+  target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(basic PRIVATE CXXStateTree)
 
-add_executable(nested examples/nested.cpp)
-target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(nested PRIVATE CXXStateTree)
+  add_executable(nested examples/nested.cpp)
+  target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(nested PRIVATE CXXStateTree)
 
-add_executable(export_dot_example examples/export_dot.cpp)
-target_include_directories(export_dot_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_example PRIVATE CXXStateTree)
-add_executable(export_dot_nested_example examples/export_dot_nested.cpp)
-target_include_directories(export_dot_nested_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_nested_example PRIVATE CXXStateTree)
-add_executable(export_dot_context_example examples/export_dot_context.cpp)
-target_include_directories(export_dot_context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_context_example PRIVATE CXXStateTree)
+  add_executable(export_dot_example examples/export_dot.cpp)
+  target_include_directories(export_dot_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(export_dot_example PRIVATE CXXStateTree)
+  add_executable(export_dot_nested_example examples/export_dot_nested.cpp)
+  target_include_directories(export_dot_nested_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(export_dot_nested_example PRIVATE CXXStateTree)
+  add_executable(export_dot_context_example examples/export_dot_context.cpp)
+  target_include_directories(export_dot_context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(export_dot_context_example PRIVATE CXXStateTree)
 
-add_executable(context_example examples/context_example.cpp)
-target_include_directories(context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(context_example PRIVATE CXXStateTree)
+  add_executable(context_example examples/context_example.cpp)
+  target_include_directories(context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_link_libraries(context_example PRIVATE CXXStateTree)
 
 endif()
 
