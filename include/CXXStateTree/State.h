@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CXXSTATETREE_STATE_H
+#define CXXSTATETREE_STATE_H
 
 #include <list>
 #include "Transition.h"
@@ -34,3 +35,4 @@ namespace CXXStateTree
         std::optional<std::string> initial_substate_;
     };
 } // namespace CXXStateTree
+#endif // CXXSTATETREE_STATE_H

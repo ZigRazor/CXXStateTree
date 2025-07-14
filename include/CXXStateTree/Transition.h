@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CXXSTATETREE_TRANSITION_H
+#define CXXSTATETREE_TRANSITION_H
 
 #include <string>
 #include <optional>
@@ -17,3 +18,4 @@ namespace CXXStateTree
         Action action = nullptr;
     };
 } // namespace CXXStateTree
+#endif // CXXSTATETREE_TRANSITION_H

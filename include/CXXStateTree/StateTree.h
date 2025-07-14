@@ -1,5 +1,5 @@
-// File: include/libstatetree/state_tree.hpp
-#pragma once
+#ifndef CXXSTATETREE_STATETREE_H
+#define CXXSTATETREE_STATETREE_H
 
 #include <string>
 
@@ -36,3 +36,4 @@ namespace CXXStateTree
     };
 
 } // namespace CXXStateTree
+#endif // CXXSTATETREE_STATETREE_H
