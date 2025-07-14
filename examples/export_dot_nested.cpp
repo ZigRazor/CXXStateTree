@@ -1,5 +1,4 @@
-#include "CXXStateTree/Builder.hpp"
-#include "CXXStateTree/StateTree.hpp"
+#include "CXXStateTree/StateTree.h"
 #include <iostream>
 #include <fstream>
 
@@ -7,7 +6,7 @@ using namespace CXXStateTree;
 
 int main()
 {
-       auto tree = Builder()
+       auto tree = StateTree::Builder()
                        .initial("Main")
                        .state("Main", [](State &s)
                               { s.initial_substate("Idle")

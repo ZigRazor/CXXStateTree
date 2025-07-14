@@ -1,12 +1,12 @@
 // File: examples/basic.cpp
 #include <iostream>
-#include "CXXStateTree/Builder.hpp"
+#include "CXXStateTree/StateTree.h"
 
 using namespace CXXStateTree;
 
 int main()
 {
-       auto machine = Builder()
+       auto machine = StateTree::Builder()
                           .initial("Main")
                           .state("Main", [](State &s)
                                  { s.initial_substate("Idle")

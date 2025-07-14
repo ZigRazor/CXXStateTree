@@ -1,5 +1,5 @@
-#include "CXXStateTree/Builder.hpp"
-#include "CXXStateTree/StateTree.hpp"
+
+#include "CXXStateTree/StateTree.h"
 #include <iostream>
 #include <fstream>
 
@@ -21,7 +21,7 @@ public:
 int main()
 {
     UserAuthorizedGuard auth_guard;
-    auto tree = Builder()
+    auto tree = StateTree::Builder()
                     .initial("Idle")
                     .state("Idle", [&](State &s)
                            { s.on("login", "Dashboard", &auth_guard, [](const std::any &ctx)
