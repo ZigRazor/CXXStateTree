@@ -23,6 +23,7 @@ include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/heads/main.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -41,28 +42,28 @@ endif()
 
 option(ENABLE_EXAMPLE "Enable Example" OFF)
 
-if(ENABLE_TEST)
+if(ENABLE_EXAMPLE)
 add_executable(basic examples/basic.cpp)
 target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(basic PUBLIC CXXStateTree)
+target_link_libraries(basic PRIVATE CXXStateTree)
 
 add_executable(nested examples/nested.cpp)
 target_include_directories(basic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(nested PUBLIC CXXStateTree)
+target_link_libraries(nested PRIVATE CXXStateTree)
 
 add_executable(export_dot_example examples/export_dot.cpp)
 target_include_directories(export_dot_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_example PUBLIC CXXStateTree)
+target_link_libraries(export_dot_example PRIVATE CXXStateTree)
 add_executable(export_dot_nested_example examples/export_dot_nested.cpp)
 target_include_directories(export_dot_nested_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_nested_example PUBLIC CXXStateTree)
+target_link_libraries(export_dot_nested_example PRIVATE CXXStateTree)
 add_executable(export_dot_context_example examples/export_dot_context.cpp)
 target_include_directories(export_dot_context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(export_dot_context_example PUBLIC CXXStateTree)
+target_link_libraries(export_dot_context_example PRIVATE CXXStateTree)
 
 add_executable(context_example examples/context_example.cpp)
 target_include_directories(context_example PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(context_example PUBLIC CXXStateTree)
+target_link_libraries(context_example PRIVATE CXXStateTree)
 
 endif()
 
@@ -112,6 +113,7 @@ if(ENABLE_SINGLE_HEADER)
     FetchContent_Declare(
       googletest
       URL https://github.com/google/googletest/archive/refs/heads/main.zip
+      DOWNLOAD_EXTRACT_TIMESTAMP true
     )
     # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
