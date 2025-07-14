@@ -1,4 +1,4 @@
-#include "CXXStateTree/Builder.hpp"
+#include "CXXStateTree/StateTree.h"
 #include <iostream>
 #include <string>
 #include <any>
@@ -24,7 +24,7 @@ int main()
 {
     UserAuthorizedGuard auth_guard;
 
-    auto sm = Builder()
+    auto sm = StateTree::Builder()
                   .initial("Idle")
                   .state("Idle", [&](State &s)
                          { s.on("login", "Dashboard", &auth_guard, [](const std::any &ctx)

@@ -1,13 +1,12 @@
 // File: tests/state_tree_test.cpp
 #include <gtest/gtest.h>
-#include "CXXStateTree/StateTree.hpp"
-#include "CXXStateTree/Builder.hpp"
+#include "CXXStateTree/StateTree.h"
 
 using namespace CXXStateTree;
 
 TEST(StateTreeTest, InitialStateIsSetCorrectly)
 {
-       auto machine = Builder()
+       auto machine = StateTree::Builder()
                           .initial("Idle")
                           .state("Idle", [](State &s)
                                  { s.on("Start", "Running"); })
@@ -20,7 +19,7 @@ TEST(StateTreeTest, InitialStateIsSetCorrectly)
 
 TEST(StateTreeTest, TransitionChangesState)
 {
-       auto machine = Builder()
+       auto machine = StateTree::Builder()
                           .initial("Idle")
                           .state("Idle", [](State &s)
                                  { s.on("Start", "Running"); })
@@ -45,7 +44,7 @@ TEST(StateTreeTest, GuardPreventsTransition)
                      return false;
               }
        };
-       auto machine = Builder()
+       auto machine = StateTree::Builder()
                           .initial("Idle")
                           .state("Idle", [](State &s)
                                  { s.on("Start", "Running", new NotPassGuard()); })
@@ -61,7 +60,7 @@ TEST(StateTreeTest, ActionIsCalled)
 {
        bool actionCalled = false;
 
-       auto machine = Builder()
+       auto machine = StateTree::Builder()
                           .initial("Idle")
                           .state("Idle", [&](State &s)
                                  { s.on("Start", "Running", nullptr, [&](const std::any &)

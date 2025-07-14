@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CXXSTATETREE_IGUARD_H
+#define CXXSTATETREE_IGUARD_H
 
 #include <string>
 #include <optional>
@@ -16,3 +17,5 @@ namespace CXXStateTree
     };
 
 } // namespace CXXStateTree
+
+#endif // CXXSTATETREE_IGUARD_H

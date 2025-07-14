@@ -21,7 +21,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lcov
 
       - name: Configure CMake with coverage
-        run: cmake -S . -B build -DENABLE_COVERAGE=ON
+        run: cmake -S . -B build -DENABLE_TEST=ON -DENABLE_COVERAGE=ON
 
       - name: Build
         run: cmake --build build --config Debug

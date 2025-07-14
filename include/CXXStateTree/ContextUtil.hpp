@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CXXSTATETREE_CONTEXTUTIL_HPP
+#define CXXSTATETREE_CONTEXTUTIL_HPP
 
 #include <string>
 #include <optional>
@@ -28,3 +29,5 @@ namespace CXXStateTree
     }
 
 } // namespace CXXStateTree
+
+#endif // CXXSTATETREE_CONTEXTUTIL_H
